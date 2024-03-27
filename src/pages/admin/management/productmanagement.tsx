@@ -1,29 +1,26 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
-import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { useSelector } from "react-redux";
-import { UserReducerInitialState } from "../../../types/reducers-types";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
+import AdminSidebar from "../../../components/admin/AdminSidebar";
+import { Skeleton } from "../../../components/loader";
 import {
-  useDeleteProductsMutation,
+  useDeleteProductMutation,
   useProductDetailsQuery,
-  useUpdateProductsMutation,
+  useUpdateProductMutation,
 } from "../../../redux/api/productAPI";
-import { server } from "../../../redux/store";
-import Loader from "../../../components/loader";
+import { RootState, server } from "../../../redux/store";
 import { responseToast } from "../../../utils/features";
 
 const Productmanagement = () => {
-  const { user } = useSelector(
-    (state: { userReducer: UserReducerInitialState }) => state.userReducer
-  );
+  const { user } = useSelector((state: RootState) => state.userReducer);
 
   const params = useParams();
   const navigate = useNavigate();
 
   const { data, isLoading, isError } = useProductDetailsQuery(params.id!);
 
-  const { photo, category, name, stock, price } = data?.product || {
+  const { price, photo, name, stock, category } = data?.product || {
     photo: "",
     category: "",
     name: "",
@@ -38,8 +35,8 @@ const Productmanagement = () => {
   const [photoUpdate, setPhotoUpdate] = useState<string>("");
   const [photoFile, setPhotoFile] = useState<File>();
 
-  const [updateProduct] = useUpdateProductsMutation();
-  const [deleteProduct] = useDeleteProductsMutation();
+  const [updateProduct] = useUpdateProductMutation();
+  const [deleteProduct] = useDeleteProductMutation();
 
   const changeImageHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const file: File | undefined = e.target.files?.[0];
@@ -59,6 +56,7 @@ const Productmanagement = () => {
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const formData = new FormData();
 
     if (nameUpdate) formData.set("name", nameUpdate);
@@ -102,7 +100,7 @@ const Productmanagement = () => {
       <AdminSidebar />
       <main className="product-management">
         {isLoading ? (
-          <Loader />
+          <Skeleton length={20} />
         ) : (
           <>
             <section>

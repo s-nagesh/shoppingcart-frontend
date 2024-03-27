@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   AllOrdersResponse,
   MessageResponse,
-  CreateOrderRequest,
+  NewOrderRequest,
   OrderDetailsResponse,
   UpdateOrderRequest,
 } from "../../types/api-types";
@@ -14,7 +14,7 @@ export const orderApi = createApi({
   }),
   tagTypes: ["orders"],
   endpoints: (builder) => ({
-    newOrder: builder.mutation<MessageResponse, CreateOrderRequest>({
+    newOrder: builder.mutation<MessageResponse, NewOrderRequest>({
       query: (order) => ({
         url: "createorder",
         method: "POST",

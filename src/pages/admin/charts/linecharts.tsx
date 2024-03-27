@@ -2,18 +2,16 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { LineChart } from "../../../components/admin/Charts";
-import Loader from "../../../components/loader";
+import { Skeleton } from "../../../components/loader";
 import { useLineQuery } from "../../../redux/api/dashboardAPI";
+import { RootState } from "../../../redux/store";
 import { CustomError } from "../../../types/api-types";
 import { getLastMonths } from "../../../utils/features";
-import { UserReducerInitialState } from "../../../types/reducers-types";
 
 const { last12Months: months } = getLastMonths();
 
 const Linecharts = () => {
-  const { user } = useSelector(
-    (state: { userReducer: UserReducerInitialState }) => state.userReducer
-  );
+  const { user } = useSelector((state: RootState) => state.userReducer);
 
   const { isLoading, data, error, isError } = useLineQuery(user?._id!);
 
@@ -34,7 +32,7 @@ const Linecharts = () => {
         <h1>Line Charts</h1>
 
         {isLoading ? (
-          <Loader />
+          <Skeleton length={15} />
         ) : (
           <>
             <section>

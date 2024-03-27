@@ -7,10 +7,10 @@ import { Navigate } from "react-router-dom";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import { BarChart, DoughnutChart } from "../../components/admin/Charts";
 import Table from "../../components/admin/DashboardTable";
-import Loader from "../../components/loader";
+import { Skeleton } from "../../components/loader";
 import { useStatsQuery } from "../../redux/api/dashboardAPI";
+import { RootState } from "../../redux/store";
 import { getLastMonths } from "../../utils/features";
-import { UserReducerInitialState } from "../../types/reducers-types";
 
 const userImg =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJxA5cTf-5dh5Eusm0puHbvAhOrCRPtckzjA&usqp";
@@ -18,14 +18,11 @@ const userImg =
 const { last6Months: months } = getLastMonths();
 
 const Dashboard = () => {
-  const { user } = useSelector(
-    (state: { userReducer: UserReducerInitialState }) => state.userReducer
-  );
+  const { user } = useSelector((state: RootState) => state.userReducer);
 
-  const { isLoading, data, isError } = useStatsQuery(user?._id!);
+  const { isLoading, data, isError } = useStatsQuery(user?._id);
 
   const stats = data?.stats!;
-  console.log("stats", stats);
 
   if (isError) return <Navigate to={"/"} />;
 
@@ -34,7 +31,7 @@ const Dashboard = () => {
       <AdminSidebar />
       <main className="dashboard">
         {isLoading ? (
-          <Loader />
+          <Skeleton length={20} />
         ) : (
           <>
             <div className="bar">

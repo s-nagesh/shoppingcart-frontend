@@ -12,9 +12,8 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useNewOrderMutation } from "../redux/api/orderAPI";
 import { resetCart } from "../redux/reducer/cartReducer";
 import { RootState } from "../redux/store";
-import { CreateOrderRequest } from "../types/api-types";
+import { NewOrderRequest } from "../types/api-types";
 import { responseToast } from "../utils/features";
-import { UserReducerInitialState } from "../types/reducers-types";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
@@ -24,9 +23,7 @@ const CheckOutForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { user } = useSelector(
-    (state: { userReducer: UserReducerInitialState }) => state.userReducer
-  );
+  const { user } = useSelector((state: RootState) => state.userReducer);
 
   const {
     shippingInfo,
@@ -48,7 +45,7 @@ const CheckOutForm = () => {
     if (!stripe || !elements) return;
     setIsProcessing(true);
 
-    const orderData: CreateOrderRequest = {
+    const orderData: NewOrderRequest = {
       shippingInfo,
       orderItems: cartItems,
       subtotal,
