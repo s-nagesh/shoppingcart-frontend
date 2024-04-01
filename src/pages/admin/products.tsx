@@ -1,16 +1,16 @@
 import { ReactElement, useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Column } from "react-table";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import TableHOC from "../../components/admin/TableHOC";
-import { Skeleton } from "../../components/loader";
 import { useAllProductsQuery } from "../../redux/api/productAPI";
-import { RootState, server } from "../../redux/store";
+import { server } from "../../redux/store";
+import toast from "react-hot-toast";
 import { CustomError } from "../../types/api-types";
-
+import { useSelector } from "react-redux";
+import { UserReducerInitialState } from "../../types/reducers-types";
+import Loader from "../../components/loader";
 interface DataType {
   photo: ReactElement;
   name: string;
@@ -43,15 +43,15 @@ const columns: Column<DataType>[] = [
 ];
 
 const Products = () => {
-  const { user } = useSelector((state: RootState) => state.userReducer);
-
-  const { isLoading, isError, error, data } = useAllProductsQuery(user?._id!);
-
+  const { user } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
   const [rows, setRows] = useState<DataType[]>([]);
 
+  const { data, isError, error, isLoading } = useAllProductsQuery(user?._id!);
+
   if (isError) {
-    const err = error as CustomError;
-    toast.error(err.data.message);
+    toast.error((error as CustomError).data.message);
   }
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const Products = () => {
   return (
     <div className="admin-container">
       <AdminSidebar />
-      <main>{isLoading ? <Skeleton length={20} /> : Table}</main>
+      <main>{isLoading ? <Loader /> : Table}</main>
       <Link to="/admin/product/new" className="create-product-btn">
         <FaPlus />
       </Link>

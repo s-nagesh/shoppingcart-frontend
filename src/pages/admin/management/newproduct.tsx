@@ -2,12 +2,14 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
-import { useNewProductMutation } from "../../../redux/api/productAPI";
-import { RootState } from "../../../redux/store";
+import { useCreateProductsMutation } from "../../../redux/api/productAPI";
 import { responseToast } from "../../../utils/features";
+import { UserReducerInitialState } from "../../../types/reducers-types";
 
 const NewProduct = () => {
-  const { user } = useSelector((state: RootState) => state.userReducer);
+  const { user } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
 
   const [name, setName] = useState<string>("");
   const [category, setCategory] = useState<string>("");
@@ -16,7 +18,7 @@ const NewProduct = () => {
   const [photoPrev, setPhotoPrev] = useState<string>("");
   const [photo, setPhoto] = useState<File>();
 
-  const [newProduct] = useNewProductMutation();
+  const [newProduct] = useCreateProductsMutation();
   const navigate = useNavigate();
 
   const changeImageHandler = (e: ChangeEvent<HTMLInputElement>) => {

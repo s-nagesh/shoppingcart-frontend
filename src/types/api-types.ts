@@ -86,7 +86,7 @@ export type LineResponse = {
   charts: Line;
 };
 
-export type NewProductRequest = {
+export type CreateProductRequest = {
   id: string;
   formData: FormData;
 };

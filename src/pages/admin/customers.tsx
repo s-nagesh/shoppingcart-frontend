@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Column } from "react-table";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import TableHOC from "../../components/admin/TableHOC";
-import { Skeleton } from "../../components/loader";
+import Loader from "../../components/loader";
 import {
   useAllUsersQuery,
   useDeleteUserMutation,
@@ -13,6 +13,7 @@ import {
 import { RootState } from "../../redux/store";
 import { CustomError } from "../../types/api-types";
 import { responseToast } from "../../utils/features";
+import { UserReducerInitialState } from "../../types/reducers-types";
 
 interface DataType {
   avatar: ReactElement;
@@ -51,7 +52,9 @@ const columns: Column<DataType>[] = [
 ];
 
 const Customers = () => {
-  const { user } = useSelector((state: RootState) => state.userReducer);
+  const { user } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
 
   const { isLoading, data, isError, error } = useAllUsersQuery(user?._id!);
 
@@ -106,7 +109,7 @@ const Customers = () => {
   return (
     <div className="admin-container">
       <AdminSidebar />
-      <main>{isLoading ? <Skeleton length={20} /> : Table}</main>
+      <main>{isLoading ? <Loader /> : Table}</main>
     </div>
   );
 };

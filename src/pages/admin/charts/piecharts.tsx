@@ -2,12 +2,14 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { DoughnutChart, PieChart } from "../../../components/admin/Charts";
-import { Skeleton } from "../../../components/loader";
+import Loader from "../../../components/loader";
 import { usePieQuery } from "../../../redux/api/dashboardAPI";
-import { RootState } from "../../../redux/store";
+import { UserReducerInitialState } from "../../../types/reducers-types";
 
 const PieCharts = () => {
-  const { user } = useSelector((state: RootState) => state.userReducer);
+  const { user } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
 
   const { isLoading, data, isError } = usePieQuery(user?._id!);
 
@@ -27,7 +29,7 @@ const PieCharts = () => {
         <h1>Pie & Doughnut Charts</h1>
 
         {isLoading ? (
-          <Skeleton length={20} />
+          <Loader />
         ) : (
           <>
             <section>

@@ -1,26 +1,29 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
-import { useSelector } from "react-redux";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
-import { Skeleton } from "../../../components/loader";
+import { useSelector } from "react-redux";
+import { UserReducerInitialState } from "../../../types/reducers-types";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
-  useDeleteProductMutation,
+  useDeleteProductsMutation,
   useProductDetailsQuery,
-  useUpdateProductMutation,
+  useUpdateProductsMutation,
 } from "../../../redux/api/productAPI";
-import { RootState, server } from "../../../redux/store";
+import { server } from "../../../redux/store";
+import Loader from "../../../components/loader";
 import { responseToast } from "../../../utils/features";
 
 const Productmanagement = () => {
-  const { user } = useSelector((state: RootState) => state.userReducer);
+  const { user } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
 
   const params = useParams();
   const navigate = useNavigate();
 
   const { data, isLoading, isError } = useProductDetailsQuery(params.id!);
 
-  const { price, photo, name, stock, category } = data?.product || {
+  const { photo, category, name, stock, price } = data?.product || {
     photo: "",
     category: "",
     name: "",
@@ -35,8 +38,8 @@ const Productmanagement = () => {
   const [photoUpdate, setPhotoUpdate] = useState<string>("");
   const [photoFile, setPhotoFile] = useState<File>();
 
-  const [updateProduct] = useUpdateProductMutation();
-  const [deleteProduct] = useDeleteProductMutation();
+  const [updateProduct] = useUpdateProductsMutation();
+  const [deleteProduct] = useDeleteProductsMutation();
 
   const changeImageHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const file: File | undefined = e.target.files?.[0];
@@ -56,7 +59,6 @@ const Productmanagement = () => {
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const formData = new FormData();
 
     if (nameUpdate) formData.set("name", nameUpdate);
@@ -100,7 +102,7 @@ const Productmanagement = () => {
       <AdminSidebar />
       <main className="product-management">
         {isLoading ? (
-          <Skeleton length={20} />
+          <Loader />
         ) : (
           <>
             <section>

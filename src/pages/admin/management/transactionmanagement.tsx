@@ -2,7 +2,7 @@ import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
-import { Skeleton } from "../../../components/loader";
+import Loader from "../../../components/loader";
 import {
   useDeleteOrderMutation,
   useOrderDetailsQuery,
@@ -11,6 +11,7 @@ import {
 import { RootState, server } from "../../../redux/store";
 import { Order, OrderItem } from "../../../types/types";
 import { responseToast } from "../../../utils/features";
+import { UserReducerInitialState } from "../../../types/reducers-types";
 
 const defaultData: Order = {
   shippingInfo: {
@@ -32,7 +33,9 @@ const defaultData: Order = {
 };
 
 const TransactionManagement = () => {
-  const { user } = useSelector((state: RootState) => state.userReducer);
+  const { user } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
 
   const params = useParams();
   const navigate = useNavigate();
@@ -77,7 +80,7 @@ const TransactionManagement = () => {
       <AdminSidebar />
       <main className="product-management">
         {isLoading ? (
-          <Skeleton />
+          <Loader />
         ) : (
           <>
             <section

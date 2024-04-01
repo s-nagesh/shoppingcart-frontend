@@ -36,7 +36,7 @@ const Shipping = () => {
 
     try {
       const { data } = await axios.post(
-        `${server}/payment/createcoupen`,
+        `${server}/payment/create`,
         {
           amount: total,
         },

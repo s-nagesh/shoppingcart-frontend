@@ -1,17 +1,19 @@
 import { useSelector } from "react-redux";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { BarChart } from "../../../components/admin/Charts";
-import { RootState } from "../../../redux/store";
 import { useBarQuery } from "../../../redux/api/dashboardAPI";
 import { CustomError } from "../../../types/api-types";
 import toast from "react-hot-toast";
-import { Skeleton } from "../../../components/loader";
+import Loader from "../../../components/loader";
 import { getLastMonths } from "../../../utils/features";
+import { UserReducerInitialState } from "../../../types/reducers-types";
 
 const { last12Months, last6Months } = getLastMonths();
 
 const Barcharts = () => {
-  const { user } = useSelector((state: RootState) => state.userReducer);
+  const { user } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
 
   const { isLoading, data, error, isError } = useBarQuery(user?._id!);
 
@@ -30,7 +32,7 @@ const Barcharts = () => {
       <main className="chart-container">
         <h1>Bar Charts</h1>
         {isLoading ? (
-          <Skeleton length={20} />
+          <Loader />
         ) : (
           <>
             <section>

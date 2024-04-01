@@ -19,6 +19,7 @@ import { IconType } from "react-icons";
 
 const AdminSidebar = () => {
   const location = useLocation();
+  // console.log("location", location);
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [phoneActive, setPhoneActive] = useState<boolean>(
@@ -60,6 +61,7 @@ const AdminSidebar = () => {
         }
       >
         <h2>Logo.</h2>
+
         <DivOne location={location} />
         <DivTwo location={location} />
         <DivThree location={location} />
@@ -165,6 +167,7 @@ interface LiProps {
   Icon: IconType;
 }
 const Li = ({ url, text, location, Icon }: LiProps) => (
+  // console.log("url----", url, text),
   <li
     style={{
       backgroundColor: location.pathname.includes(url)
